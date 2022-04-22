@@ -1,17 +1,30 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, Button } from "react-native";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { toggleFavourite } from "./../store/actions/meals";
 
 export default function Meals() {
-  const meals = useSelector((state) => state.meals.meals);
+  const favMeals = useSelector((state) => state.meals.favouriteMeals);
+
+  const dispatch = useDispatch();
 
   return (
     <View style={{ margin: 50 }}>
-      <Text>meals</Text>
+      <Text>Fav Meals</Text>
       <FlatList
-        data={meals}
+        data={favMeals}
         renderItem={(itemData) => {
-          return <Text>{itemData.item.title}</Text>;
+          return (
+            <View style={{ margin: 10 }}>
+              <Button
+                title={itemData.item.title}
+                onPress={() => {
+                  dispatch(toggleFavourite(itemData.item.id));
+                }}
+              />
+            </View>
+          );
         }}
         keyExtractor={(item) => {
           return item.id;
